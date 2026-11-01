@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0509" />
+  <meta name="description" content="For Someone Special — A personal message for Irtiza" />
+  <title>For Someone Special — Irtiza</title>
+
+  <!-- Google Fonts with fast preconnect and graceful serif/sans fallbacks for slow connections -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. CSS VARIABLES & THEME TOKENS
+       ========================================================================== */
+    :root {
+      --bg-deep: #090306;
+      --bg-burgundy: #1a0812;
+      --bg-wine: #280c1c;
+      --rose-gold-light: #fce7ee;
+      --rose-gold-mid: #f3bfd0;
+      --rose-gold-accent: #e598b2;
+      --rose-gold-warm: #d4879c;
+      --text-primary: #fdf6f8;
+      --text-secondary: rgba(252, 231, 238, 0.78);
+      --text-muted: rgba(243, 191, 208, 0.52);
+      --glass-bg: rgba(28, 10, 20, 0.45);
+      --glass-border: rgba(243, 191, 208, 0.16);
+      --glass-border-hover: rgba(243, 191, 208, 0.38);
+      --glow-soft: 0 0 28px rgba(229, 152, 178, 0.25);
+      --glow-strong: 0 0 42px rgba(229, 152, 178, 0.42);
+      --font-serif: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE LAYOUT
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      overflow: hidden;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+
+    /* ==========================================================================
+       3. AMBIENT BACKGROUND & BLURRED LIGHT EFFECTS
+       ========================================================================== */
+    .ambient-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 25%, rgba(56, 15, 36, 0.72) 0%, transparent 62%),
+        radial-gradient(circle at 20% 80%, rgba(42, 11, 26, 0.65) 0%, transparent 55%),
+        linear-gradient(160deg, var(--bg-deep) 0%, var(--bg-burgundy) 52%, #0e0409 100%);
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      opacity: 0.34;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    .orb-1 {
+      width: min(65vw, 460px);
+      height: min(65vw, 460px);
+      top: -10%;
+      left: -8%;
+      background: radial-gradient(circle, rgba(229, 152, 178, 0.35), rgba(128, 34, 68, 0.08) 70%);
+      animation: floatOrbOne 22s ease-in-out infinite alternate;
+    }
+
+    .orb-2 {
+      width: min(70vw, 520px);
+      height: min(70vw, 520px);
+      bottom: -14%;
+      right: -10%;
+      background: radial-gradient(circle, rgba(212, 135, 156, 0.28), rgba(92, 22, 49, 0.06) 70%);
+      animation: floatOrbTwo 26s ease-in-out infinite alternate;
+    }
+
+    .orb-3 {
+      width: min(50vw, 340px);
+      height: min(50vw, 340px);
+      top: 38%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(243, 191, 208, 0.16), transparent 72%);
+      animation: pulseCenterOrb 14s ease-in-out infinite;
+    }
+
+    @keyframes floatOrbOne {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(6vw, 5vh) scale(1.12); }
+    }
+
+    @keyframes floatOrbTwo {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-6vw, -6vh) scale(1.1); }
+    }
+
+    @keyframes pulseCenterOrb {
+      0%, 100% { opacity: 0.22; transform: translate(-50%, -50%) scale(0.95); }
+      50% { opacity: 0.38; transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    /* Subtle vignette overlay for cinematic depth */
+    .vignette-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 48%, rgba(5, 2, 4, 0.72) 100%);
+    }
+
+    /* Background particle & floating heart canvas */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       4. MAIN EXPERIENCE CONTAINER & SCREEN STATES
+       ========================================================================== */
+    .experience-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding:
+        max(1.5rem, env(safe-area-inset-top))
+        1.5rem
+        max(1.75rem, env(safe-area-inset-bottom));
+    }
+
+    /* Top bar for subtle decorative label */
+    .top-header {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 2.25rem;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .top-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .header-pill {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(243, 191, 208, 0.1);
+      background: rgba(18, 6, 13, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Screen sections */
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), visibility 1.1s;
+    }
+
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* ==========================================================================
+       5. SCREEN 1: OPENING SCREEN ("For Someone Special")
+       ========================================================================== */
+    .intro-card {
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+      padding: 2.5rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.75rem;
+      animation: gentleFloatIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes gentleFloatIn {
+      0% { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .ornament-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--rose-gold-warm);
+      opacity: 0.75;
+    }
+
+    .ornament-line::before,
+    .ornament-line::after {
+      content: "";
+      width: 38px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--rose-gold-mid), transparent);
+    }
+
+    .ornament-diamond {
+      font-size: 0.65rem;
+      line-height: 1;
+    }
+
+    .intro-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.35rem, 6.5vw, 3.75rem);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1.18;
+      background: linear-gradient(135deg, #ffffff 0%, var(--rose-gold-light) 48%, var(--rose-gold-accent) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 36px rgba(229, 152, 178, 0.25);
+    }
+
+    .intro-subtitle {
+      font-family: var(--font-sans);
+      font-size: clamp(0.88rem, 2.5vw, 0.98rem);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      max-width: 320px;
+      line-height: 1.6;
+    }
+
+    /* Glowing Primary Action Button */
+    .btn-glow {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      margin-top: 0.5rem;
+      padding: 0.95rem 2.1rem;
+      min-height: 50px;
+      border-radius: 999px;
+      border: 1px solid rgba(243, 191, 208, 0.34);
+      background: linear-gradient(135deg, rgba(62, 18, 39, 0.72) 0%, rgba(33, 9, 22, 0.85) 100%);
+      color: var(--rose-gold-light);
+      font-family: var(--font-sans);
+      font-size: 0.94rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      box-shadow:
+        0 0 25px rgba(229, 152, 178, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease,
+        border-color 0.35s ease,
+        background 0.35s ease;
+    }
+
+    .btn-glow:hover,
+    .btn-glow:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(243, 191, 208, 0.62);
+      box-shadow:
+        0 0 36px rgba(229, 152, 178, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      outline: none;
+    }
+
+    .btn-glow:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-heart-icon {
+      display: inline-block;
+      color: var(--rose-gold-accent);
+      font-size: 1.05em;
+      transition: transform 0.35s ease;
+    }
+
+    .btn-glow:hover .btn-heart-icon {
+      transform: scale(1.18);
+    }
+
+    /* ==========================================================================
+       6. SCREEN 2: SEQUENTIAL STORYTELLING MESSAGE EXPERIENCE
+       ========================================================================== */
+    .story-stage {
+      width: 100%;
+      max-width: 620px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 56dvh;
+      padding: 1rem 0.5rem;
+    }
+
+    .message-container {
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: text;
+    }
+
+    .message-container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .message-container.fading-out {
+      opacity: 0;
+      transform: translateY(-8px);
+      transition:
+        opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .message-paragraph {
+      font-family: var(--font-serif);
+      font-size: clamp(1.38rem, 4.2vw, 1.92rem);
+      font-weight: 400;
+      line-height: 1.62;
+      letter-spacing: 0.015em;
+      color: var(--text-primary);
+      margin-bottom: 1.45rem;
+      text-shadow: 0 2px 24px rgba(229, 152, 178, 0.16);
+    }
+
+    .message-paragraph:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Highlighted salutation / key lines */
+    .message-paragraph.salutation {
+      font-style: italic;
+      font-size: clamp(1.55rem, 4.8vw, 2.2rem);
+      color: var(--rose-gold-light);
+    }
+
+    /* Word-by-word reveal styling */
+    .word-span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(7px);
+      filter: blur(4px);
+      transition:
+        opacity 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .word-span.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* Bottom Navigation & Progress Footer */
+    .story-footer {
+      position: relative;
+      z-index: 15;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.15rem;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .story-footer.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* Controls row: Continue button */
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+
+    .btn-continue {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.78rem 1.85rem;
+      min-height: 46px;
+      min-width: 148px;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--rose-gold-light);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+      transition:
+        border-color 0.3s ease,
+        background 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .btn-continue:hover,
+    .btn-continue:focus-visible {
+      border-color: var(--glass-border-hover);
+      background: rgba(48, 16, 33, 0.62);
+      box-shadow: var(--glow-soft);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .btn-continue:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* Subtle auto-advance fill bar inside bottom edge of Continue button */
+    .auto-timer-bar {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(243, 191, 208, 0.25), var(--rose-gold-accent));
+      transition: width 0.1s linear;
+    }
+
+    .continue-arrow {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-continue:hover .continue-arrow {
+      transform: translateX(3px);
+    }
+
+    /* Progress indicator dots and counter */
+    .progress-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .progress-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+    }
+
+    .progress-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(243, 191, 208, 0.22);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.45s ease, box-shadow 0.45s ease;
+    }
+
+    .progress-dot.completed {
+      background: rgba(243, 191, 208, 0.52);
+    }
+
+    .progress-dot.active {
+      width: 22px;
+      background: var(--rose-gold-accent);
+      box-shadow: 0 0 10px rgba(229, 152, 178, 0.6);
+    }
+
+    .progress-caption {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       7. SCREEN 3: FINAL EMOTIONAL SCREEN
+       ========================================================================== */
+    .final-card {
+      text-align: center;
+      max-width: 580px;
+      width: 100%;
+      padding: 2rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .final-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 6vw, 3.25rem);
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 0.015em;
+      color: var(--rose-gold-light);
+      text-shadow:
+        0 0 24px rgba(229, 152, 178, 0.48),
+        0 0 55px rgba(229, 152, 178, 0.24);
+      animation: softTextGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes softTextGlow {
+      0% {
+        text-shadow:
+          0 0 20px rgba(229, 152, 178, 0.38),
+          0 0 45px rgba(229, 152, 178, 0.18);
+      }
+      100% {
+        text-shadow:
+          0 0 32px rgba(243, 191, 208, 0.68),
+          0 0 70px rgba(229, 152, 178, 0.36);
+      }
+    }
+
+    .final-subtext {
+      font-family: var(--font-sans);
+      font-size: clamp(0.98rem, 2.8vw, 1.14rem);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Animated Centerpiece Heart on Final Screen */
+    .heart-emblem-wrapper {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      margin: 0.85rem 0 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .heart-pulse-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(229, 152, 178, 0.32);
+      animation: expandRing 3.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+
+    .heart-pulse-ring.ring-delay {
+      animation-delay: 1.6s;
+    }
+
+    @keyframes expandRing {
+      0% {
+        transform: scale(0.75);
+        opacity: 0.75;
+      }
+      100% {
+        transform: scale(1.65);
+        opacity: 0;
+      }
+    }
+
+    .heart-svg {
+      width: 52px;
+      height: 52px;
+      filter: drop-shadow(0 0 18px rgba(229, 152, 178, 0.55));
+      animation: gentleHeartbeat 2.6s ease-in-out infinite;
+    }
+
+    @keyframes gentleHeartbeat {
+      0%, 100% { transform: scale(1); }
+      18% { transform: scale(1.12); }
+      34% { transform: scale(0.98); }
+      50% { transform: scale(1.07); }
+    }
+
+    .btn-replay {
+      margin-top: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      min-height: 46px;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: rgba(24, 8, 17, 0.55);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .btn-replay:hover,
+    .btn-replay:focus-visible {
+      color: var(--rose-gold-light);
+      border-color: var(--glass-border-hover);
+      box-shadow: var(--glow-soft);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    /* ==========================================================================
+       8. RESPONSIVE & REDUCED-MOTION ADJUSTMENTS
+       ========================================================================== */
+    @media (max-width: 480px) {
+      .experience-wrapper {
+        padding:
+          max(1.15rem, env(safe-area-inset-top))
+          1.25rem
+          max(1.4rem, env(safe-area-inset-bottom));
+      }
+
+      .message-paragraph {
+        line-height: 1.58;
+        margin-bottom: 1.2rem;
+      }
+
+      .btn-glow {
+        width: 100%;
+        max-width: 265px;
+      }
+
+      .btn-continue {
+        min-width: 165px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.25s !important;
+      }
+
+      .word-span {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Background Layers -->
+  <div class="ambient-stage" aria-hidden="true">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+  <div class="vignette-overlay" aria-hidden="true"></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- Main Interactive Wrapper -->
+  <main class="experience-wrapper">
+    <!-- Subtle Top Header -->
+    <header id="top-header" class="top-header" aria-hidden="true">
+      <span class="header-pill">A Note For Irtiza</span>
+    </header>
+
+    <!-- SCREEN 1: OPENING SCREEN -->
+    <section id="screen-intro" class="screen active" aria-labelledby="intro-heading">
+      <div class="intro-card">
+        <div class="ornament-line" aria-hidden="true">
+          <span class="ornament-diamond">✦</span>
+        </div>
+
+        <h1 id="intro-heading" class="intro-title">For Someone Special</h1>
+
+        <p class="intro-subtitle">
+          A few honest words held quietly in my heart, written just for you.
+        </p>
+
+        <button id="btn-open-message" type="button" class="btn-glow">
+          <span>Open My Message</span>
+          <span class="btn-heart-icon" aria-hidden="true">♡</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: SEQUENTIAL MESSAGE STAGE -->
+    <section id="screen-story" class="screen" aria-live="polite">
+      <div class="story-stage">
+        <div id="message-container" class="message-container"></div>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: FINAL EMOTIONAL SCREEN -->
+    <section id="screen-final" class="screen" aria-labelledby="final-heading">
+      <div class="final-card">
+        <div class="ornament-line" aria-hidden="true">
+          <span class="ornament-diamond">✦</span>
+        </div>
+
+        <h2 id="final-heading" class="final-heading">
+          I will be waiting for your reply ❤️
+        </h2>
+
+        <p class="final-subtext">Take your time. No pressure.</p>
+
+        <!-- Animated Heart Emblem beneath text -->
+        <div class="heart-emblem-wrapper" aria-hidden="true">
+          <div class="heart-pulse-ring"></div>
+          <div class="heart-pulse-ring ring-delay"></div>
+          <svg class="heart-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="roseHeartGrad" x1="2" y1="3" x2="22" y2="21" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#fce7ee" />
+                <stop offset="48%" stop-color="#e598b2" />
+                <stop offset="100%" stop-color="#b85478" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              fill="url(#roseHeartGrad)"
+            />
+          </svg>
+        </div>
+
+        <button id="btn-read-again" type="button" class="btn-replay">
+          <span aria-hidden="true">↺</span>
+          <span>Read Again</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Bottom Navigation & Progress Indicator for Story Screen -->
+    <footer id="story-footer" class="story-footer">
+      <div class="controls-row">
+        <button id="btn-continue" type="button" class="btn-continue" aria-label="Continue to next message">
+          <span id="continue-label">Continue</span>
+          <span class="continue-arrow" aria-hidden="true">→</span>
+          <span id="auto-timer-bar" class="auto-timer-bar" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="progress-wrapper">
+        <div id="progress-dots" class="progress-dots" role="tablist" aria-label="Message progress"></div>
+        <span id="progress-caption" class="progress-caption">1 of 7</span>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    /* ==========================================================================
+       1. ROMANTIC MESSAGE SEQUENCE DATA
+       Exact sequence of 7 heartfelt messages for Irtiza
+       ========================================================================== */
+    const MESSAGES = [
+      [
+        "Hii Irtiza...",
+        "I want to talk to you about something.",
+        "Can you please listen to me for a moment?"
+      ],
+      [
+        "I first saw you at the mess, and somehow, from that very moment, you stayed in my mind.",
+        "I still remember that moment. I don't know how to explain it, but something about you caught my attention."
+      ],
+      [
+        "I fell for you the very moment I saw you.",
+        "I tried to find a chance to talk to you, but somehow, it never happened. There were so many things I wanted to say, but I could never find the right moment."
+      ],
+      [
+        "I have been admiring you from a distance for quite some time.",
+        "But keeping all these feelings to myself has become difficult.",
+        "I don't want to delay telling you how I feel anymore. I thought it was better to be honest with you rather than keep wondering what could have happened."
+      ],
+      [
+        "Honestly, you have been on my mind more often than you could imagine.",
+        "And I think it's time to ask you something.",
+        "Would you let me be a part of your life?",
+        "I would love to get to know you better, spend time with you, and create beautiful memories together."
+      ],
+      [
+        "I cannot promise that every day will be perfect, but I can promise that I will always try my best to make you smile, respect you, support you and make you feel special.",
+        "I want to bring happiness into your life and give you the love and care you truly deserve."
+      ],
+      [
+        "I don't know what your answer will be, and I completely respect your feelings.",
+        "Please don't feel pressured to say anything. I just wanted you to know what is in my heart."
+      ]
+    ];
+
+    /* ==========================================================================
+       2. STATE & DOM REFERENCES
+       ========================================================================== */
+    const screenIntro = document.getElementById('screen-intro');
+    const screenStory = document.getElementById('screen-story');
+    const screenFinal = document.getElementById('screen-final');
+    const topHeader = document.getElementById('top-header');
+    const storyFooter = document.getElementById('story-footer');
+    const messageContainer = document.getElementById('message-container');
+    const progressDotsContainer = document.getElementById('progress-dots');
+    const progressCaption = document.getElementById('progress-caption');
+    const btnOpenMessage = document.getElementById('btn-open-message');
+    const btnContinue = document.getElementById('btn-continue');
+    const btnReadAgain = document.getElementById('btn-read-again');
+    const autoTimerBar = document.getElementById('auto-timer-bar');
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let currentIndex = 0;
+    let isTransitioning = false;
+    let wordRevealTimeouts = [];
+    let autoAdvanceFrameId = null;
+    let autoAdvanceStartTime = 0;
+    let autoAdvanceDuration = 0;
+
+    /* ==========================================================================
+       3. INITIALIZE PROGRESS INDICATOR DOTS
+       ========================================================================== */
+    function initProgressDots() {
+      progressDotsContainer.innerHTML = '';
+      MESSAGES.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'progress-dot';
+        dot.setAttribute('aria-label', `Go to message ${idx + 1}`);
+        dot.addEventListener('click', () => {
+          if (!isTransitioning && idx !== currentIndex) {
+            transitionToMessage(idx);
+          }
+        });
+        progressDotsContainer.appendChild(dot);
+      });
+    }
+
+    function updateProgressUI(index) {
+      const dots = progressDotsContainer.querySelectorAll('.progress-dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === index);
+        dot.classList.toggle('completed', idx < index);
+      });
+      progressCaption.textContent = `${index + 1} of ${MESSAGES.length}`;
+    }
+
+    /* ==========================================================================
+       4. TIMING & SEQUENTIAL MESSAGE ENGINE
+       Calculates reading time dynamically based on word count & reveal duration
+       ========================================================================== */
+    function clearActiveTimers() {
+      wordRevealTimeouts.forEach(t => clearTimeout(t));
+      wordRevealTimeouts = [];
+      if (autoAdvanceFrameId) {
+        cancelAnimationFrame(autoAdvanceFrameId);
+        autoAdvanceFrameId = null;
+      }
+      autoTimerBar.style.width = '0%';
+    }
+
+    function calculateDisplayTiming(paragraphs) {
+      const fullText = paragraphs.join(' ');
+      const words = fullText.trim().split(/\s+/);
+      const wordCount = words.length;
+
+      // Word-by-word reveal interval (in ms)
+      const wordStepMs = prefersReducedMotion ? 0 : 115;
+      const totalRevealTimeMs = wordCount * wordStepMs;
+
+      // Generous reading time after all words are visible:
+      // Minimum 6.5 seconds + 240ms per word so she never feels rushed
+      const comfortableReadMs = Math.max(6800, wordCount * 240 + 4800);
+      const totalDurationMs = totalRevealTimeMs + comfortableReadMs;
+
+      return { wordStepMs, totalDurationMs };
+    }
+
+    function renderMessageContent(index) {
+      clearActiveTimers();
+      messageContainer.innerHTML = '';
+      updateProgressUI(index);
+
+      const paragraphs = MESSAGES[index];
+      const { wordStepMs, totalDurationMs } = calculateDisplayTiming(paragraphs);
+
+      let cumulativeWordIndex = 0;
+
+      paragraphs.forEach((paraText, pIdx) => {
+        const p = document.createElement('p');
+        p.className = 'message-paragraph';
+        if (index === 0 && pIdx === 0) {
+          p.classList.add('salutation');
+        }
+
+        const words = paraText.trim().split(/\s+/);
+        words.forEach((word, wIdx) => {
+          const span = document.createElement('span');
+          span.className = 'word-span';
+          span.textContent = word;
+          p.appendChild(span);
+
+          if (wIdx < words.length - 1) {
+            p.appendChild(document.createTextNode(' '));
+          }
+
+          if (prefersReducedMotion) {
+            span.classList.add('revealed');
+          } else {
+            const delay = 220 + cumulativeWordIndex * wordStepMs;
+            const timerId = setTimeout(() => {
+              span.classList.add('revealed');
+            }, delay);
+            wordRevealTimeouts.push(timerId);
+          }
+
+          cumulativeWordIndex++;
+        });
+
+        messageContainer.appendChild(p);
+      });
+
+      // Fade container in
+      requestAnimationFrame(() => {
+        messageContainer.classList.remove('fading-out');
+        messageContainer.classList.add('visible');
+      });
+
+      // Start smooth auto-advance progress bar & timer
+      startAutoAdvanceTimer(totalDurationMs);
+    }
+
+    function startAutoAdvanceTimer(durationMs) {
+      autoAdvanceDuration = durationMs;
+      autoAdvanceStartTime = performance.now();
+
+      function tick(now) {
+        const elapsed = now - autoAdvanceStartTime;
+        const progress = Math.min(1, elapsed / autoAdvanceDuration);
+        autoTimerBar.style.width = `${(progress * 100).toFixed(1)}%`;
+
+        if (progress < 1) {
+          autoAdvanceFrameId = requestAnimationFrame(tick);
+        } else {
+          autoAdvanceFrameId = null;
+          handleAdvanceNext();
+        }
+      }
+
+      autoAdvanceFrameId = requestAnimationFrame(tick);
+    }
+
+    function transitionToMessage(nextIndex) {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      clearActiveTimers();
+
+      // Slowly fade out current message
+      messageContainer.classList.remove('visible');
+      messageContainer.classList.add('fading-out');
+
+      const fadeOutWait = prefersReducedMotion ? 260 : 880;
+      setTimeout(() => {
+        currentIndex = nextIndex;
+        renderMessageContent(currentIndex);
+        isTransitioning = false;
+      }, fadeOutWait);
+    }
+
+    function handleAdvanceNext() {
+      if (isTransitioning) return;
+
+      if (currentIndex < MESSAGES.length - 1) {
+        transitionToMessage(currentIndex + 1);
+      } else {
+        transitionToFinalScreen();
+      }
+    }
+
+    /* ==========================================================================
+       5. SCREEN TRANSITIONS (INTRO -> STORY -> FINAL -> REPLAY)
+       ========================================================================== */
+    function startStoryExperience() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      clearActiveTimers();
+
+      screenIntro.classList.remove('active');
+      screenFinal.classList.remove('active');
+
+      setTimeout(() => {
+        currentIndex = 0;
+        topHeader.classList.add('visible');
+        screenStory.classList.add('active');
+        storyFooter.classList.add('visible');
+        renderMessageContent(0);
+        isTransitioning = false;
+      }, prefersReducedMotion ? 200 : 750);
+    }
+
+    function transitionToFinalScreen() {
+      isTransitioning = true;
+      clearActiveTimers();
+
+      messageContainer.classList.remove('visible');
+      messageContainer.classList.add('fading-out');
+      storyFooter.classList.remove('visible');
+
+      setTimeout(() => {
+        screenStory.classList.remove('active');
+        screenFinal.classList.add('active');
+        isTransitioning = false;
+      }, prefersReducedMotion ? 250 : 900);
+    }
+
+    /* ==========================================================================
+       6. EVENT LISTENERS
+       ========================================================================== */
+    btnOpenMessage.addEventListener('click', startStoryExperience);
+    btnContinue.addEventListener('click', handleAdvanceNext);
+    btnReadAgain.addEventListener('click', startStoryExperience);
+
+    /* ==========================================================================
+       7. SUBTLE FLOATING HEARTS & GLOWING PARTICLES (HTML5 CANVAS)
+       ========================================================================== */
+    (function initAmbientCanvas() {
+      const canvas = document.getElementById('particle-canvas');
+      const ctx = canvas.getContext('2d');
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let particles = [];
+
+      function resizeCanvas() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        createParticles();
+      }
+
+      function createParticles() {
+        // Keep particle count delicate and uncluttered
+        const count = width < 600 ? 22 : 34;
+        particles = [];
+
+        for (let i = 0; i < count; i++) {
+          const isHeart = i % 5 === 0; // Only ~20% are tiny subtle hearts; rest are soft glowing motes
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            size: isHeart ? (4.5 + Math.random() * 4.5) : (1.2 + Math.random() * 2.2),
+            speedY: 0.14 + Math.random() * 0.28,
+            driftX: (Math.random() - 0.5) * 0.22,
+            alpha: 0.12 + Math.random() * 0.36,
+            pulseSpeed: 0.008 + Math.random() * 0.015,
+            phase: Math.random() * Math.PI * 2,
+            isHeart
+          });
+        }
+      }
+
+      function drawTinyHeart(x, y, size, alpha) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(size / 16, size / 16);
+        ctx.beginPath();
+        ctx.moveTo(0, 4);
+        ctx.bezierCurveTo(0, 1.5, -3.5, 0, -6, 0);
+        ctx.bezierCurveTo(-10, 0, -10, 5.5, -10, 5.5);
+        ctx.bezierCurveTo(-10, 9.5, -5.5, 13.5, 0, 17);
+        ctx.bezierCurveTo(5.5, 13.5, 10, 9.5, 10, 5.5);
+        ctx.bezierCurveTo(10, 5.5, 10, 0, 6, 0);
+        ctx.bezierCurveTo(3.5, 0, 0, 1.5, 0, 4);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(243, 191, 208, ${alpha})`;
+        ctx.shadowColor = 'rgba(229, 152, 178, 0.45)';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function renderParticles() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+
+          if (!prefersReducedMotion) {
+            p.y -= p.speedY;
+            p.x += p.driftX + Math.sin(p.phase) * 0.12;
+            p.phase += p.pulseSpeed;
+
+            if (p.y < -20) {
+              p.y = height + 20;
+              p.x = Math.random() * width;
+            }
+            if (p.x < -20) p.x = width + 20;
+            if (p.x > width + 20) p.x = -20;
+          }
+
+          const currentAlpha = p.alpha * (0.7 + 0.3 * Math.sin(p.phase));
+
+          if (p.isHeart) {
+            drawTinyHeart(p.x, p.y, p.size, currentAlpha * 0.75);
+          } else {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(252, 231, 238, ${currentAlpha})`;
+            ctx.shadowColor = 'rgba(229, 152, 178, 0.5)';
+            ctx.shadowBlur = 6;
+            ctx.fill();
+          }
+        }
+
+        if (!prefersReducedMotion) {
+          requestAnimationFrame(renderParticles);
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      initProgressDots();
+      resizeCanvas();
+      renderParticles();
+    })();
+  </script>
+</body>
+</html>
